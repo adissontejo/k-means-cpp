@@ -45,7 +45,7 @@ void agrupar(){ // função que roda o k-means
 	}
 	while(mudanca){ // enquanto há mudanças de cluster nos pontos
 		mudanca = false;
-		for(int i = 0; i < n; i++){  // É calculada a dist�ncia de cada ponto para cada centro
+		for(int i = 0; i < n; i++){  // É calculada a distância de cada ponto para cada centro
 			int centro = -1; // variável que guarda o índice do centro mais próximo
 			double menor = 0x3f3f3f3f; // variável que guarda o valor da menor distância
 			for(int j = 0; j < k; j++){
@@ -68,7 +68,7 @@ void agrupar(){ // função que roda o k-means
 				}
 				clusters[centro].qt++; // a quantidade de pontos é aumentada
 				pontos[i].grupo = centro; // o cluster do ponto é atualizado
-				mudanca = true; // � registrado que houve mudanças na atual etapa
+				mudanca = true; // é registrado que houve mudanças na atual etapa
 			}
 		}
 		for(int i = 0; i < k; i++){ // os centros dos clusters são atualizados para a média dos dados

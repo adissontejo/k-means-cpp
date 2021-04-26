@@ -1,4 +1,6 @@
 *~
 *.swp
+.vs/*
+.vscode/*
 bin/*
 

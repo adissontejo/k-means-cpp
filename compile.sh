@@ -1,3 +1,3 @@
 #!/bin/bash
 
-g++ kmeans.cpp -O3 -o bin/kmeans
+g++ *.cpp -O3 -o bin/kmeans

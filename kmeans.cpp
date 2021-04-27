@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-
 struct ponto{ // estrutura do ponto
 	vector<double> data; // dados do ponto
 	int grupo = -1; // cluster do ponto
@@ -14,40 +13,39 @@ struct cluster{ // estrutura do cluster
 	int qt = 0; // quantidade de pontos no cluster
 };
 
-int n, d, k; // quantidade de pontos, dimensão e quantidade de clusters
 vector<ponto> pontos; // vetor dos pontos
-vector<cluster> clusters; // vetor dos clusters
 
 double calc(ponto a, cluster b){ // função que calcula a distância euclidiana
   double total = 0;
-  for(int i = 0; i < d; i++){
+  for(int i = 0; i < a.data.size(); i++){
   	total += pow(a.data[i] - b.data[i], 2);
 	}
 	//return sqrt(total);
 	return total;
 }
 
-void agrupar(){ // função que roda o k-means
+void agrupar(int n, int d, int k){ // função que roda o k-means
 
 	bool mudanca = true; // se houve mudança de grupos nos pontos ou não
+	vector<cluster> clusters (k); // vetor dos clusters
+
 	for(int i = 0; i < k; i++){ // definição dos clusters
-		cluster a;
+		clusters[i].soma.resize(d, 0); // o vetor de soma dos dados dos pontos do cluster é zerado
 		while(true){
 			int n = rand()%pontos.size(); // É gerado um número aleatório de um ponto
 			if(!pontos[n].usado){ // se os dados de tal ponto ainda não foram escolhidos como centro:
 				pontos[n].usado = true; // tais dados são escolhidos
-				a.data = pontos[n].data; // o centro do cluster recebe os dados do ponto
-				a.soma.resize(d, 0); // o vetor de soma dos dados dos pontos do cluster é zerado
+				clusters[i].data = pontos[n].data; // o centro do cluster recebe os dados do ponto				
 				break;
 			}
 		}
-		clusters.push_back(a); // o cluster recém-definido é colocado no vetor de clusters
 	}
+	
 	while(mudanca){ // enquanto há mudanças de cluster nos pontos
 		mudanca = false;
 		for(int i = 0; i < n; i++){  // É calculada a distância de cada ponto para cada centro
 			int centro = -1; // variável que guarda o índice do centro mais próximo
-			double menor = 0x3f3f3f3f; // variável que guarda o valor da menor distância
+			double menor = INFINITY; // variável que guarda o valor da menor distância
 			for(int j = 0; j < k; j++){
 				double dist = calc(pontos[i], clusters[j]);
 				if(dist < menor){ // se a distância recém calculada for menor que a menor distância até então:
@@ -77,30 +75,7 @@ void agrupar(){ // função que roda o k-means
 			}
 		}
 	}
-}
-
-int main(){
-	ios_base::sync_with_stdio(false); cin.tie(0);
-	srand (time(NULL));
-
-	cin >> n >> d; // são lidas a quantidade de pontos e a dimensão
-
-	for(int i = 0; i < n; i++){ // são lidos n pontos com d dados cada
-		ponto a;
-
-		for(int j = 0; j < d; j++){
-			double x;
-			cin >> x;
-			a.data.push_back(x);
-		}
-
-		pontos.push_back(a);
-	}
-
-	cin >> k; // É lida a quantidade de clusters 
-
-	agrupar(); // É chamada a funçãoo que roda o algoritmo k-means
-
+	
 	for(int i = 0; i < n; i++){ // os clusters de cada ponto são printados
 		cout << "Cluster " << i << " >> Grupo " << pontos[i].grupo << endl;
 	}
@@ -108,6 +83,28 @@ int main(){
 	for(int i = 0; i < k; i++){ // as quantidades de pontos de cada cluster são printadas
 		cout << "Grupo " << i << " >> " << clusters[i].qt << " pontos\n";
 	}
+
+}
+
+int main(){
+	ios_base::sync_with_stdio(false); cin.tie(0);
+	srand (time(NULL));
+
+	int n, d, k; // quantidade de pontos, dimensão e quantidade de clusters
+	cin >> n >> d; // são lidas a quantidade de pontos, a dimensão e a quantidade de clusters
+	pontos.resize(n); // é definido o tamanho do vetor pontos
+
+	for(int i = 0; i < n; i++){ // são lidos n pontos com d dados cada
+		pontos[i].data.resize(d); // é definido o tamanho do vetor de dados do ponto
+		for(int j = 0; j < d; j++){
+			cin >> pontos[i].data[j];
+		}
+	}
+
+	cin >> k;
+
+	agrupar(n, d, k); // É chamada a funçãoo que roda o algoritmo k-means
+
   return 0;
 }
 

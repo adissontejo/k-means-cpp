@@ -1,9 +1,12 @@
 #include <bits/stdc++.h>
+#include "agrupamento.h"
 #include "kmeans.h"
+#include "genetico.h"
+#include "pso.h"
 
 using namespace std;
 
-int main(){
+int main(int argc, char **argv){
 	ios_base::sync_with_stdio(false); cin.tie(0);
 	srand (time(NULL));
 
@@ -20,27 +23,14 @@ int main(){
 	}
 
 	cin >> k; // é lida a quantidade de clusters
+	clusters.resize(k);
 
-	double menor = INFINITY; // vetor que guarda a menor média das dinstâncias entre ponto e centro
-	vector<ponto> melhor; // vetor que guarda o melhor cenário de divisão do k-means
-
-	for(int i = 0; i < 100; i++){ // o k-means é executado 100 vezes e permanece o melhor cenário
-		double media = kmeans(n, d, k); // É chamada a função que roda o algoritmo k-means
-		if(media < menor){ // se a média das distâncias for menor que a até então menor média
-			menor = media; // tal média se torna a menor média
-			melhor = pontos; // tal cenário se torna o melhor cenário
-		}
-	}
-
-	vector<int> qt (k, 0);
-
-	for(int i = 0; i < n; i++){ // são printados os pontos e seus respectivos clusters
-		cout << "Ponto " << i << " >> Cluster " << melhor[i].grupo << endl;
-		qt[melhor[i].grupo]++;
-	}
-	cout << endl;
-	for(int i = 0; i < k; i++){ // são printados os clusters e suas quantidades de pontos
-		cout << "Cluster " << i << " >> " << qt[i] << " Pontos\n";
+	if(strcmp(argv[1], "GEN") == 0){ // é escolhido o algoritmo de acordo com o argv
+		genetico();
+	}else if(strcmp(argv[1], "PSO") == 0){
+		pso();
+	}else{
+		kmeans();
 	}
 
   return 0;

@@ -9,6 +9,11 @@ using namespace std;
 int main(int argc, char **argv){
 	ios_base::sync_with_stdio(false); cin.tie(0);
 	srand (time(NULL));
+	
+	if(argc < 2){
+		cout << "   *** Usage: " << argv[0] << " KMO|PSO|GEN\n";
+		exit(0); 
+	}
 
 	int n, d, k; // quantidade de pontos, dimensão e quantidade de clusters
 	cin >> n >> d; // são lidas a quantidade de pontos, a dimensão e a quantidade de clusters

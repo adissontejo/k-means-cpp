@@ -22,6 +22,6 @@ extern bool inicio;
 extern vector<ponto> pontos;
 extern vector<cluster> clusters;
 
-double agrupamento();
+double agrupamento(int pct = -1);
 
 #endif

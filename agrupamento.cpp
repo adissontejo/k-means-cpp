@@ -4,7 +4,7 @@
 using namespace std;
 
 vector<ponto> pontos;
-vector<cluster> clusters;
+vector<cluster> clusters (3);
 
 bool mudanca, inicio = true;
 
@@ -16,18 +16,29 @@ double calc(ponto a, cluster b){ // função que calcula a distância euclidiana
 	return total;
 }
 
-double agrupamento(){ // função base que define os grupos dos pontos e retorna a função objetiva de um agrupamento específico
+double agrupamento(int pct){ // função base que define os grupos dos pontos e retorna a função objetiva de um agrupamento específico
   int n = pontos.size();
   int d = pontos[0].data.size();
   int k = clusters.size();
   for(int i = 0; i < n; i++){  // É calculada a distância de cada ponto para cada centro
 		int centro = -1; // variável que guarda o índice do centro mais próximo
+		int centro2 = -1; // variável que guarda o valor do segundo centro mais próximo
 		double menor = INFINITY; // variável que guarda o valor da menor distância
+		double segundoMenor = INFINITY; // variável que guarda o valor da segunda menor distância
 		for(int j = 0; j < k; j++){
 			double dist = calc(pontos[i], clusters[j]);
 			if(dist < menor){ // se a distância recém calculada for menor que a menor distância até então:
 				menor = dist; // tal distância é registrada como a menor
 				centro = j; // tal centro é registrado como o mais próximo
+			}else if(dist < segundoMenor){
+				segundoMenor = dist;
+				centro2 = j;
+			}
+		}
+		if(pct > 0){
+			int r = rand()%100;
+			if(r < pct){
+				centro = centro2;
 			}
 		}
 		int antigo = pontos[i].grupo; // variável que armazena o antigo centro mais próximo do ponto

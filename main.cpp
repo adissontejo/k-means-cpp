@@ -3,6 +3,7 @@
 #include "kmeans.h"
 #include "genetico.h"
 #include "pso.h"
+#include "grasp.h"
 
 using namespace std;
 
@@ -27,13 +28,12 @@ int main(int argc, char **argv){
 		}
 	}
 
-	cin >> k; // é lida a quantidade de clusters
-	clusters.resize(k);
-
 	if(strcmp(argv[1], "GEN") == 0){ // é escolhido o algoritmo de acordo com o argv
 		genetico();
 	}else if(strcmp(argv[1], "PSO") == 0){
 		pso();
+	}else if(strcmp(argv[1], "GRP") == 0){
+		grasp();
 	}else{
 		kmeans();
 	}

@@ -12,7 +12,7 @@ int main(int argc, char **argv){
 	srand (time(NULL));
 	
 	if(argc < 2){
-		cout << "   *** Usage: " << argv[0] << " KMO|PSO|GEN\n";
+		cout << "   *** Usage: " << argv[0] << " KMO|PSO|GEN|GRP\n";
 		exit(0); 
 	}
 

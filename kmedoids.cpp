@@ -36,7 +36,7 @@ double kmedoids(int pct){
   int it = 0;
 
 	while(mudanca and it < 20){ // enquanto há mudanças de cluster nos pontos
-		if(pct == -2) // prevenção para evitar loops no grasp
+		if(pct != -1) // prevenção para evitar loops no grasp
       it++;
     mudanca = false;
 		dist = agrupamento(pct);

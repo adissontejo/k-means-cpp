@@ -29,7 +29,7 @@ void grasp(){ // função que roda o grasp
         for(int i = 0; i < n; i++){
           swap(lista[i], lista[rand()%n]);
         }
-        for(int i = 0; i < min(n, 100); i++){
+        for(int i = 0; i < min(n, 50); i++){
           int novoGrupo = rand()%k; // novo grupo aleatorizado para o ponto escolhido
           int p = lista[i];
           int antigo = pontos[p].grupo;

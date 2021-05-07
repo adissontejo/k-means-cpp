@@ -41,7 +41,9 @@ void grasp(){ // função que roda o grasp
           clusters[novoGrupo].qt++;
           for(int j = 0; j < d; j++){ // os dados dos centros são atualizados
             clusters[antigo].soma[j] -= pontos[p].data[j];
-            clusters[antigo].data[j] = (double) clusters[antigo].soma[j]/clusters[antigo].qt;
+            if(clusters[antigo].qt != 0){
+              clusters[antigo].data[j] = (double) clusters[antigo].soma[j]/clusters[antigo].qt;
+            }
             clusters[novoGrupo].soma[j] += pontos[p].data[j];
             clusters[novoGrupo].data[j] = (double) clusters[novoGrupo].soma[j]/clusters[novoGrupo].qt;
           }

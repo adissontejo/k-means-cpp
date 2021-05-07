@@ -28,6 +28,8 @@ double agrupamento(int pct){ // função base que define os grupos dos pontos e 
 		for(int j = 0; j < k; j++){
 			double dist = calc(pontos[i], clusters[j]);
 			if(dist < menor){ // se a distância recém calculada for menor que a menor distância até então:
+				centro2 = centro;
+				segundoMenor = menor;
 				menor = dist; // tal distância é registrada como a menor
 				centro = j; // tal centro é registrado como o mais próximo
 			}else if(dist < segundoMenor){

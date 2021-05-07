@@ -42,7 +42,9 @@ double kmedoids(int pct){
 		dist = agrupamento(pct);
 		for(int i = 0; i < k; i++){ // os centros dos clusters são atualizados para a média dos dados
 			for(int j = 0; j < d; j++){
-				clusters[i].data[j] = (double) clusters[i].soma[j]/clusters[i].qt;
+        if(clusters[i].qt != 0){
+				  clusters[i].data[j] = (double) clusters[i].soma[j]/clusters[i].qt;
+        }
 			}
 		}
 		inicio = false; // a váriavel início é setada com valor baixo

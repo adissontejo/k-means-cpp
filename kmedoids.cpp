@@ -36,10 +36,10 @@ double kmedoids(int pct){
   int it = 0;
 
 	while(mudanca and it < 20){ // enquanto há mudanças de cluster nos pontos
-		if(pct != -1) // prevenção para evitar loops no grasp
+		if(pct == -2) // prevenção para evitar loops no grasp
       it++;
     mudanca = false;
-		dist = agrupamento(pct);
+		dist = agrupamento((inicio ? pct : -1));
 		for(int i = 0; i < k; i++){ // os centros dos clusters são atualizados para a média dos dados
 			for(int j = 0; j < d; j++){
         if(clusters[i].qt != 0){

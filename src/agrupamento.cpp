@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
-#include "agrupamento.h"
+#include "../include/agrupamento.h"
 
 using namespace std;
 
 vector<ponto> pontos;
-vector<cluster> clusters (3);
+vector<cluster> clusters;
 
 bool mudanca, inicio = true;
 

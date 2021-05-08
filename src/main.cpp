@@ -1,9 +1,9 @@
 #include <bits/stdc++.h>
-#include "agrupamento.h"
-#include "kmeans.h"
-#include "genetico.h"
-#include "pso.h"
-#include "grasp.h"
+#include "../include/agrupamento.h"
+#include "../include/kmeans.h"
+#include "../include/genetico.h"
+#include "../include/pso.h"
+#include "../include/grasp.h"
 
 using namespace std;
 
@@ -27,6 +27,14 @@ int main(int argc, char **argv){
 			cin >> pontos[i].data[j];
 		}
 	}
+
+	if(argc < 3){
+		k = 3;
+	}else{
+		k = atoi(argv[2]);
+	}
+
+	clusters.resize(k);
 
 	if(strcmp(argv[1], "GEN") == 0){ // é escolhido o algoritmo de acordo com o argv
 		genetico();

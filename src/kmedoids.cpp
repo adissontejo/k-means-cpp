@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
-#include "agrupamento.h"
+#include "../include/agrupamento.h"
+#include "../include/kmedoids.h"
 
 using namespace std;
 

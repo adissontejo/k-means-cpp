@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
-#include "agrupamento.h"
-#include "pso.h"
+#include "../include/agrupamento.h"
+#include "../include/pso.h"
 
 using namespace std;
 

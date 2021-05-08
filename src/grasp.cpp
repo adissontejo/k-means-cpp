@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
-#include "agrupamento.h"
-#include "kmedoids.h"
-#include "grasp.h"
+#include "../include/agrupamento.h"
+#include "../include/kmedoids.h"
+#include "../include/grasp.h"
 
 using namespace std;
 

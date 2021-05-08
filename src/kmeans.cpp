@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
-#include "agrupamento.h"
-#include "kmeans.h"
+#include "../include/agrupamento.h"
+#include "../include/kmeans.h"
 
 using namespace std;
 

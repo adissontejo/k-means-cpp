@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
-#include "agrupamento.h"
-#include "genetico.h"
+#include "../include/agrupamento.h"
+#include "../include/genetico.h"
 
 struct gene{ // estrutura de um gene
   vector<cluster> clustersG;

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-g++ *.cpp -O3 -o bin/kmeans
+g++ src/*.cpp -O3 -o bin/clustering

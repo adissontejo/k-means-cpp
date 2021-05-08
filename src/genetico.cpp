@@ -1,136 +1,140 @@
+/*
+  Arquivo usado para agrupar os pontos utilizando
+  o algoritmo genético
+*/
+
 #include <bits/stdc++.h>
 #include "../include/agrupamento.h"
 #include "../include/genetico.h"
 
 struct gene{ // estrutura de um gene
-  vector<cluster> clustersG;
-  int chance;
+  vector<cluster> clustersG; // vetor de clusters do gene
+  int chance; // chance de um gene morrer na seleção natural
 };
 
 void genetico(){ // função que roda o algoritmo genético
-  int n = pontos.size(); // são declaradas as variáveis de tamanho
-  int d = pontos[0].data.size();
-  int k = clusters.size();
+  int n = pontos.size(); // variável que guarda o valor da quantidade de pontos
+  int d = pontos[0].data.size(); // variável que guarda o valor da dimensão 
+  int k = clusters.size(); // variável que guarda o valor da quantidade de clusters
   int g = k*d*10; // a quantidade de genes é definida
-  clock_t tIni = clock();
-  double melhorFuncaoObjetivo = INFINITY;
-  vector<cluster> melhorGrupoDeCluster;
+  clock_t tIni = clock(); // variável que guarda o instante de tempo em que a função foi iniciada
+  double melhorFuncaoObjetivo = INFINITY; // variável que guarda o valor da melhor função objetivo de todas as iterações
+  vector<cluster> melhorGrupoDeCluster; // variável que guarda a melhor solução de todas as iterações
   vector<gene> genes(g); // é declarado o vetor de genes de tamanho g
-  for(int i = 0; i < g; i++){
-    genes[i].clustersG.resize(k);
+  for(int i = 0; i < g; i++){ // para cada gene
+    genes[i].clustersG.resize(k); // o vetor de clusters do gene é definido com tamanho k
   }
   while(clock() - tIni < 10*CLOCKS_PER_SEC){ // enquanto o tempo limite não for atingido
-    for(int i = 0; i < g; i++){ // todos os genes são iniciados com valores aleatórios
-      vector<bool> usado (n, false);
-      for(int j = 0; j < k; j++){
-        genes[i].clustersG[j].soma.resize(d, 0);
+    for(int i = 0; i < g; i++){ // para cada gene
+      vector<bool> usado (n, false); // vetor que indica se os pontos foram usados como dados dos genes ou não
+      for(int j = 0; j < k; j++){ // para cada cluster
+        genes[i].clustersG[j].soma.resize(d, 0); // o vetor de soma do cluster é zerado
         while(true){
-          int x = rand()%n;
-          if(!usado[x]){
-            usado[x] = true;
-            genes[i].clustersG[j].data = pontos[x].data;
-            break;
+          int x = rand()%n; // é sorteado um ponto (número de 0 a n - 1)
+          if(!usado[x]){ // se o ponto sorteado ainda não foi usado
+            usado[x] = true; // é indicado que o ponto foi usado
+            genes[i].clustersG[j].data = pontos[x].data; // o cluster recebe os dados do ponto
+            break; // o loop é quebrado
           }
         }
       }
     }
 
-    gene melhorGene; // variável que armazena o melhor gene
+    gene melhorGene; // variável que armazena o melhor gene da iteração atual
     int qt = 0; // variável que armazena há quantas gerações não há melhora
     bool melhora; // variável que representa se houve ou não melhora
-    double melhor = INFINITY, soma; // variável que armazena a melhor função objetivo e a soma de todas elas
+    double melhor = INFINITY; // variável que armazena a melhor função objetivo da iteração atual e a soma de todas elas
     
     while(qt < 20 and clock() - tIni < 10*CLOCKS_PER_SEC){ // condição de parada: se não houver melhora há 20 gerações ou o tempo limite de 10s for atingido
-      soma = 0;
-      melhora = false;
-      for(int i = 0; i < g; i++){ // é calculada a aptidão de cada gene
-        clusters = genes[i].clustersG;
-        double fo = agrupamento();
-        soma += fo;
-        genes[i].chance = fo;
+      double soma = 0; // variável que guarda a soma de todos os valores das funções objetivas de cada gene
+      melhora = false; // a variável melhora é setada como false
+      for(int i = 0; i < g; i++){ // para cada gene
+        clusters = genes[i].clustersG; // o vetor de clusters global recebe o vetor de clusters do gene
+        double fo = agrupamento(); // a função de agrupamento é chamada e seu valor de retorno é armazenado
+        soma += fo; // o valor da função objetivo é adicionado na variável soma
+        genes[i].chance = fo; // a chance de um gene morrer na seleção natural é definida como o valor da função objetivo
         if(fo < melhor){ // se a aptidão de tal gene for melhor que a melhor até então registrada
-          melhor = fo; // tal aptidão e este gene são tidos como melhores
-          melhorGene = genes[i];
-          melhora = true;
+          melhor = fo; // tal aptidão é definida como a melhor
+          melhorGene = genes[i]; // tal gene é definido como o melhor
+          melhora = true; // é indicado que houve melhora
         }
       }
 
-      if(!melhora){ // se não houve melhora, qt é aumentado em 1
-        qt++;
-      }else{ // se houve melhora, qt é zerado
-        qt = 0;
+      if(!melhora){ // se não houve melhora
+        qt++; // qt é incrementado
+      }else{ // se não
+        qt = 0; // qt é zerado
       }
 
-      int qtSubs = 0; // quantidade de genes que foram substituídos
       queue<int> subs; // fila que armazena os genes que serão substituídos
       vector<bool> substituido (g, false); // vetor que indica se tais genes foram substituídos ou não
 
-      for(int i = 0; i < g/2; i++){ // os genes que serão substituídos são sorteados de acordo com o método da roleta
-        int roleta = rand()%((int) soma);
-        soma = 0;
-        for(int j = 0; j < g; j++){
-          if(substituido[j])
-            continue;
-          soma += genes[j].chance;
-          if(roleta < soma){
-            substituido[j] = true;
-            subs.push(j);
-            soma -= genes[j].chance;
-            for(int l = j + 1; l < g; l++)
-              soma += genes[l].chance;
+      for(int i = 0; i < g/2; i++){ // total de iterações de metade da quantidade de genes
+        int roleta = rand()%((int) soma); // é sorteado um valor entre 0 e o valor de soma
+        soma = 0; // a variável soma é zerada
+        for(int j = 0; j < g; j++){ // para cada gene
+          if(substituido[j]) // se o gene foi substituído
+            continue; // o resto do for é ignorado
+          soma += genes[j].chance; // é adicionada à variável soma a aptidão/chance do gene
+          if(roleta < soma){ // se o número sorteado for menor que soma
+            substituido[j] = true; // é indicado que o gene foi substituído
+            subs.push(j); // o gene é adicionado à fila dos genes substituídos
+            soma -= genes[j].chance; // a aptidão/chance do gene é removida da variável soma
+            for(int l = j + 1; l < g; l++) // para cada gene restante
+              soma += genes[l].chance; // é adicionada à variável soma a aptidão/chance do gene
             break;
           }
         } 
       }
 
-      while(!subs.empty()){ // é feito o crossover
-        int novoGene = subs.front();
-        int geneA, geneB;
+      while(!subs.empty()){ // enquanto ainda há genes a serem substituídos
+        int novoGene = subs.front(); // variável que armazena o índice de um gene substituído
+        int geneA, geneB; // variáveis que guardam os índices dos pais do crossover
         while(true){
-          geneA = rand()%g;
-          if(!substituido[geneA])
-            break;
+          geneA = rand()%g; // é sorteado um pai
+          if(!substituido[geneA]) // se o pai sorteado não foi substituído
+            break; // o laço é quebrado
         }
         while(true){
-          geneB = rand()%g;
-          if(!substituido[geneB])
-            break;
+          geneB = rand()%g; // é sorteado outro pai
+          if(!substituido[geneB]) // se o pai sorteado não foi susbtituído
+            break; // o laço é quebrado
         }
-        subs.pop();
-        for(int i = 0; i < k; i++){
-          for(int j = 0; j < d; j++){
+        subs.pop(); // o gene antigo que foi substituído é removido da fila
+        for(int i = 0; i < k; i++){ // para cada cluster
+          for(int j = 0; j < d; j++){ // para cada dado do cluster
             int bit = rand()%15; // é sorteado um bit entre 0 e 14
-            double p1 = ((int) genes[geneA].clustersG[i].data[j])/(1 << bit); // é selecionada a parte que vem antes do bit sorteado no geneA
-            double p2 = ((int) genes[geneB].clustersG[i].data[j])%(1 << bit); // é selecionada a parte que vem depois do bit sorteado no geneB
-            double r = genes[geneB].clustersG[i].data[j] - ((int) genes[geneB].clustersG[i].data[j]); // é selecionada a parte decimal do geneB
-            genes[novoGene].clustersG[i].data[j] = p1*(1 << bit) + p2 + r;
+            double p1 = ((int) genes[geneA].clustersG[i].data[j])/(1 << bit); // é selecionada a parte que vem antes do bit sorteado no dado do geneA
+            double p2 = ((int) genes[geneB].clustersG[i].data[j])%(1 << bit); // é selecionada a parte que vem depois do bit sorteado no dado do geneB
+            double r = genes[geneB].clustersG[i].data[j] - ((int) genes[geneB].clustersG[i].data[j]); // é selecionada a parte decimal do dado do geneB
+            genes[novoGene].clustersG[i].data[j] = p1*(1 << bit) + p2 + r; // o dado do novo gene é definido como a junção das partes selecionadas
           }
         }
       }
 
-      for(int i = 0; i < g; i++){ // é feita a mutação
-        int x = rand()%10; // cada mutação tem 10% de chance de ocorrer
-        if(x == 0){
-          int mutacao = rand()%k; // o cluster em que a mutação ocorre é definido
-          for(int j = 0; j < d; j++){
+      for(int i = 0; i < g; i++){ // para cada gene
+        int x = rand()%10; // é sorteado um número entre 0 e 9
+        if(x == 0){ // se o número sorteado for igual a 0 (10% de chance)
+          int mutacao = rand()%k; // o cluster em que a mutação ocorre é sorteado
+          for(int j = 0; j < d; j++){ // para cada dado do cluster
             int bit = rand()%15; // é sorteado um bit entre 0 e 14
             int vInt = genes[i].clustersG[mutacao].data[j]; // é obtida a parte inteira do valor
             double r = genes[i].clustersG[mutacao].data[j] - vInt; // é obtida a parte decimal do valor
             vInt ^= (1 << bit); // o bit escolhido é invertido na parte inteira
-            genes[i].clustersG[mutacao].data[j] = vInt + r;
+            genes[i].clustersG[mutacao].data[j] = vInt + r; // o gene modificado é definido como a junção das partes inteira e decimal
           }
         }
       }
     }
-    if(melhor < melhorFuncaoObjetivo){
-      melhorGrupoDeCluster = melhorGene.clustersG;
-      melhorFuncaoObjetivo = melhor;
+    if(melhor < melhorFuncaoObjetivo){ // se o melhor valor da função objetivo da rodada atual for melhor que o melhor de todas as rodadas
+      melhorGrupoDeCluster = melhorGene.clustersG; // tal solução é definida como a melhor de todas
+      melhorFuncaoObjetivo = melhor; // tal valor é definido como o melhor
     }
   }
-  clusters = melhorGrupoDeCluster;
-  agrupamento();
-  for(int i = 0; i < n; i++){ // os pontos e seus respectivos grupos são printados
-    cout << "Ponto " << i << " >> Grupo " << pontos[i].grupo << endl;
+  clusters = melhorGrupoDeCluster; // o vetor de clusters global recebe o vetor de clusters da melhor solução do algoritmo
+  agrupamento(); // é realizada a função de agrupamento novamente
+  for(int i = 0; i < n; i++){ // para cada ponto
+    cout << "Ponto " << i << " >> Grupo " << pontos[i].grupo << endl; // é printado o ponto e seu respectivo grupo
   }
-  cout << "Menor media de distancias: " << melhorFuncaoObjetivo << endl;
+  cout << "Menor media de distancias: " << melhorFuncaoObjetivo << endl; // é printada a função objetivo do algoritmo
 }

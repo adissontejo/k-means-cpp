@@ -17,16 +17,13 @@ bool mudanca; // indica se houve mudança de grupo em algum ponto
 bool inicio = true; // indica se o algoritmo está no início
 
 // calcula a distância euclidiana entre um ponto e um centro
-double calc(ponto a, cluster b, bool raiz){
+double calc(ponto a, cluster b){
   double total = 0; // valor total da distância
   for(int i = 0; i < a.data.size(); i++){ // para cada dado do ponto
   	// é adicionado ao total o quadrado da subtração dos dados
 		total += pow(a.data[i] - b.data[i], 2);
 	}
-	if(raiz){ // caso tenha sido requisitada a raíz do total para print
-		return sqrt(total);
-	}
-	return total; // é retornada a distância (ao quadrado) para comparação
+	return sqrt(total); // é retornada a distância (ao quadrado) para comparação
 }
 
 // define os grupos dos pontos e retorna a função
@@ -100,7 +97,7 @@ double agrupamento(int pct){
   double fo = 0; // valor da função objetivo
   for(int i = 0; i < n; i++){ // para cada ponto
 		// é adicionada a distância ponto-cluster no valor da função objetivo
-    fo += calc(pontos[i], clusters[pontos[i].grupo])/((double) n);
+    fo += calc(pontos[i], clusters[pontos[i].grupo]);
   }
   return fo; // é retornado o valor da função objetivo
 }

@@ -190,14 +190,11 @@ void genetico(){ // função que roda o algoritmo genético
   // de clusters da melhor solução do algoritmo
   clusters = melhorGrupoDeCluster;
   agrupamento(); // é realizada a função de agrupamento novamente
-  double sol = 0; // valor real da função objetivo
 
   for(int i = 0; i < n; i++){ // para cada ponto
     // é printado o ponto e seu respectivo grupo
     cout << "Ponto " << i << " >> Grupo " << pontos[i].grupo << endl;
-    // é adicionada na função objetivo a distância ponto centro
-    sol += calc(pontos[i], clusters[pontos[i].grupo], true)/((double) n);
   }
   // é printada a função objetivo do algoritmo
-  cout << "Menor media de distancias: " << sol << endl;
+  cout << "Menor soma de distancias: " << melhorFuncaoObjetivo << endl;
 }

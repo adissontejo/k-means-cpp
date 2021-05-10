@@ -31,7 +31,7 @@ extern vector<ponto> pontos;
 extern vector<cluster> clusters;
 
 // a função de cálculo de distância é definida
-double calc(ponto a, cluster b, bool raiz = false);
+double calc(ponto a, cluster b);
 double agrupamento(int pct = -1); // a função de agrupamento é definida
 
 #endif

@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #include "../include/agrupamento.h"
 #include "../include/kmeans.h"
+#include "../include/kmedoids.h"
 #include "../include/genetico.h"
 #include "../include/pso.h"
 #include "../include/grasp1.h"
@@ -45,6 +46,8 @@ int main(int argc, char **argv){ // função main que recebe argc e argv como pa
 		grasp1(); // é chamado o algoritmo GRASP 1
 	}else if(strcmp(argv[1], "GRP2") == 0){ // se não, caso o segundo argumento seja GRP2
 		grasp2(); // é chamado o algoritmo GRASP 2
+	}else if(strcmp(argv[1], "KMD") == 0){
+		kmedoids();
 	}else{ // se não
 		kmeans(); // é chamado o algoritmo k-means
 	}

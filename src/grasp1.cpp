@@ -6,6 +6,7 @@
 #include <bits/stdc++.h>
 #include "../include/agrupamento.h"
 #include "../include/kmedoids.h"
+#include "../include/kmeans.h"
 #include "../include/grasp1.h"
 
 using namespace std;
@@ -19,6 +20,8 @@ void grasp1(){ // função que roda o grasp 1
   
   double melhorDist = INFINITY; // melhor distância de todas as iterações
   vector<ponto> melhorSolucao;  // melhor solução de todas as iterações
+  // melhor definição de clusters de todas as iterações
+  vector<cluster> melhoresClusters;
   clock_t tIni = clock(); // instante de tempo em que a função foi iniciada
   // porcentagem de chance de o algoritmo de agrupamento
   // escolher o segundo centro mais próximo para os pontos
@@ -31,7 +34,7 @@ void grasp1(){ // função que roda o grasp 1
     while(it < pct + 10 and clock() - tIni < tenSeconds){
       // o kmedoids com uma porcentagem pct de chance de escolher o
       // segundo cluster mais próximo é executado como construção
-      double dist = kmedoids(pct);
+      double dist = kmeans(pct);
       vector<ponto> solucaoAtual = pontos; // solução atualmente usada
       vector<cluster> clustersAtuais = clusters; // clusters atualmente usados
       // valor da função objetivo da solução atualmente usada
@@ -114,6 +117,7 @@ void grasp1(){ // função que roda o grasp 1
             pontos = solucaoAtual;
             // o vetor de clusters global volta a ser
             // o vetor de clusters atual
+            clusters = clustersAtuais;
           }
 
         }
@@ -126,6 +130,9 @@ void grasp1(){ // função que roda o grasp 1
           // o vetor de pontos da melhor solução é definido
           // como o vetor da solução atual
           melhorSolucao = solucaoAtual;
+          // o vetor de clusters da melhor solução é definido
+          // como o vetor da solução atual
+          melhoresClusters = clustersAtuais;
         }
       }
       it++; // o vetor da quantidade de iterações é incrementado
@@ -139,15 +146,12 @@ void grasp1(){ // função que roda o grasp 1
       pct = 0; // a porcentagem volta para o 0
     }
   }
-  
-  double sol = 0; // valor real da função objetivo
 
   for(int i = 0; i < n; i++){ // para cada ponto
     // é printado o ponto e seu respectivo grupo
-    cout << "Ponto " << i << " >> Grupo " << pontos[i].grupo << endl;
-    // é adicionada na função objetivo a distância ponto centro
-    sol += calc(pontos[i], clusters[pontos[i].grupo], true)/((double) n);
+    int grupo = melhorSolucao[i].grupo;
+    cout << "Ponto " << i << " >> Grupo " << grupo << endl;
   }
   // é printada a função objetivo do algoritmo
-  cout << "Menor media de distancias: " << sol << endl;
+  cout << "Menor soma de distancias: " << melhorDist << endl;
 }

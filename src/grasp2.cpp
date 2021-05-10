@@ -6,6 +6,7 @@
 #include <bits/stdc++.h>
 #include "../include/agrupamento.h"
 #include "../include/kmedoids.h"
+#include "../include/kmeans.h"
 #include "../include/grasp2.h"
 
 using namespace std;
@@ -19,6 +20,8 @@ void grasp2(){ // função que roda o grasp 2
   
   double melhorDist = INFINITY; // melhor distância de todas as iterações
   vector<ponto> melhorSolucao;  // melhor solução de todas as iterações
+  // melhor definição de clusters de todas as iterações
+  vector<cluster> melhoresClusters;
   clock_t tIni = clock(); // instante de tempo em que a função foi iniciada
   // porcentagem de chance de o algoritmo de agrupamento
   // escolher o segundo centro mais próximo para os pontos
@@ -186,14 +189,11 @@ void grasp2(){ // função que roda o grasp 2
     }
   }
   
-  double sol = 0; // valor real da função objetivo
-
   for(int i = 0; i < n; i++){ // para cada ponto
     // é printado o ponto e seu respectivo grupo
-    cout << "Ponto " << i << " >> Grupo " << pontos[i].grupo << endl;
-    // é adicionada na função objetivo a distância ponto centro
-    sol += calc(pontos[i], clusters[pontos[i].grupo], true)/((double) n);
+    int grupo = melhorSolucao[i].grupo;
+    cout << "Ponto " << i << " >> Grupo " << grupo << endl;
   }
   // é printada a função objetivo do algoritmo
-  cout << "Menor media de distancias: " << sol << endl;
+  cout << "Menor soma de distancias: " << melhorDist << endl;
 }

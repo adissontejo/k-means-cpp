@@ -82,16 +82,12 @@ double kmedoids(int pct){ // função que roda o k-medoids
 	}
 
   if(pct == -1){ // caso a função não tenha sido chamada pelo GRASP
-    double sol = 0; // valor real da função objetivo
-
     for(int i = 0; i < n; i++){ // para cada ponto
       // é printado o ponto e seu respectivo grupo
       cout << "Ponto " << i << " >> Grupo " << pontos[i].grupo << endl;
-      // é adicionada na função objetivo a distância ponto centro
-      sol += calc(pontos[i], clusters[pontos[i].grupo], true)/((double) n);
     }
     // é printada a função objetivo do algoritmo
-    cout << "Menor media de distancias: " << sol << endl;
+    cout << "Menor soma de distancias: " << dist << endl;
   }
 
   return dist; // é retornado o valor da função objetivo do algoritmo

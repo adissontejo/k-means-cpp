@@ -1,40 +1,45 @@
 SRC = $(wildcard src/*.cpp) # todos os arquivos .cpp
-_OBJS = $(patsubst src/%.cpp, %.o, $(SRC)) # são gerados nomes dos arquivos .o a partir de todos os arquivos .cpp
-OBJS = $(addprefix bin/, $(_OBJS)) # é adicionado o prefixo bin/ nos nomes dos arquivos .o
+
+# são gerados nomes dos arquivos .o a partir de todos os arquivos .cpp
+OBJS = $(patsubst src/%.cpp, bin/%.o, $(SRC))
 
 .PHONY: all
-all: bin/clustering # comando para compilar tudo novamente independentemente dos arquivos pré-existentes
+all: bin/clustering	
 
-bin/clustering: $(OBJS) bin # comando que compila de acordo com os arquivos pré-existentes e gera novos se necessário
+bin/clustering: bin $(OBJS) # gera o arquivo executável
 	g++ -O3 -o bin/clustering $(OBJS)
 
-# comandos para gerar o arquivo .o de cada arquivo .cpp
-
-bin/agrupamento.o: include/agrupamento.h src/agrupamento.cpp bin
-	g++ -c src/agrupamento.cpp -O3 -o bin/agrupamento.o
-
-bin/kmeans.o: include/agrupamento.h include/kmeans.h src/kmeans.cpp bin
-	g++ -c src/kmeans.cpp -O3 -o bin/kmeans.o
-
-bin/pso.o: include/agrupamento.h include/pso.h src/pso.cpp bin
-	g++ -c src/pso.cpp -O3 -o bin/pso.o
-
-bin/genetico.o: include/agrupamento.h include/genetico.h src/genetico.cpp bin
-	g++ -c src/genetico.cpp -O3 -o bin/genetico.o 
-
-bin/kmedoids.o: include/agrupamento.h include/kmedoids.h src/kmedoids.cpp bin
-	g++ -c src/kmedoids.cpp -O3 -o bin/kmedoids.o
-
-bin/grasp.o: include/agrupamento.h include/kmedoids.h include/grasp.h src/grasp.cpp bin
-	g++ -c src/grasp.cpp -O3 -o bin/grasp.o
-
-bin/main.o: include/agrupamento.h include/kmeans.h include/pso.h include/genetico.h include/grasp.h src/main.cpp
-	g++ -c src/main.cpp -O3 -o bin/main.o
-
-# caso não exista pasta bin, ela é criada
+#cria a pasta bin caso esta não exista ainda
 
 bin:
 	mkdir bin
+
+# geram o arquivo .o de cada arquivo .cpp caso estes não existam ainda
+
+
+bin/agrupamento.o: include/agrupamento.h src/agrupamento.cpp
+	g++ -c src/agrupamento.cpp -O3 -o bin/agrupamento.o
+
+bin/kmeans.o: include/agrupamento.h include/kmeans.h src/kmeans.cpp
+	g++ -c src/kmeans.cpp -O3 -o bin/kmeans.o
+
+bin/pso.o: include/agrupamento.h include/pso.h src/pso.cpp
+	g++ -c src/pso.cpp -O3 -o bin/pso.o
+
+bin/genetico.o: include/agrupamento.h include/genetico.h src/genetico.cpp
+	g++ -c src/genetico.cpp -O3 -o bin/genetico.o 
+
+bin/kmedoids.o: include/agrupamento.h include/kmedoids.h src/kmedoids.cpp
+	g++ -c src/kmedoids.cpp -O3 -o bin/kmedoids.o
+
+bin/grasp1.o: include/agrupamento.h include/kmedoids.h include/grasp1.h src/grasp1.cpp
+	g++ -c src/grasp1.cpp -O3 -o bin/grasp1.o
+
+bin/grasp2.o: include/agrupamento.h include/kmedoids.h include/grasp2.h src/grasp2.cpp
+	g++ -c src/grasp2.cpp -O3 -o bin/grasp2.o
+
+bin/main.o: include/agrupamento.h include/kmeans.h include/pso.h include/genetico.h include/grasp1.h include/grasp2.h src/main.cpp
+	g++ -c src/main.cpp -O3 -o bin/main.o
 
 .PHONY: clean # comando para limpar todos os arquivos .o com exceção do arquivo clustering
 clean:

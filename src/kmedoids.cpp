@@ -10,26 +10,36 @@
 using namespace std;
 
 double kmedoids(int pct){ // função que roda o k-medoids
-	int n = pontos.size(); // variável que guarda o valor da quantidade de pontos
-	int d = pontos[0].data.size(); // variável que guarda o valor da dimensão
-	int k = clusters.size(); // variável que guarda o valor da quantidade de grupos
+	int n = pontos.size(); // quantidade de pontos
+	int d = pontos[0].data.size(); // dimensão
+	int k = clusters.size(); // quantidade de grupos
   
-  if(pct != -2){ // código utilizado pelo GRASP para sinalizar que não se deve incializar os clusters
+  // código utilizado pelo GRASP para sinalizar
+  // que não se deve incializar os clusters
+  if(pct != -2){
     for(int i = 0; i < k; i++){ // para cada cluster
-      clusters[i].soma.resize(d); // o vetor de soma do cluster é definido com tamanho d
+      // o vetor de soma do cluster é definido com tamanho d
+      clusters[i].soma.resize(d);
     }
-    vector<bool> usado (n, false); // vetor que representa se determinados pontos foram usados como centros ou não
+
+    // vetor que representa se determinados pontos
+    // foram usados como centros ou não
+    vector<bool> usado (n, false);
 
     for(int i = 0; i < k; i++){ // para cada cluster
       for(int j = 0; j < d; j++){ // para cada dado do cluster
         clusters[i].soma[j] = 0; // o dado do vetor de soma é zerado
       }
-      clusters[i].qt = 0; // o valor da quantidade de pontos no cluster é zerado
+
+      // o valor da quantidade de pontos no cluster é zerado
+      clusters[i].qt = 0;
+
       while(true){
         int x = rand()%n; // é sorteado um ponto (número de 0 a n - 1)
         if(!usado[x]){ // se tal ponto ainda não foi escolhido
           usado[x] = true; // o ponto é indicado como usado
-          clusters[i].data = pontos[x].data; // o centro do cluster recebe os dados do ponto
+          // o centro do cluster recebe os dados do ponto
+          clusters[i].data = pontos[x].data;
           break;
         }
       }
@@ -38,29 +48,51 @@ double kmedoids(int pct){ // função que roda o k-medoids
   }
   
 	mudanca = true; // a variável mudanca é setada como true
-	double dist; // variável que guarda o valor da função objetivo retornado pela função de agrupamento
+	double dist; // valor da função objetivo retornado pela função de agrupamento
   int it = 0; // variável que conta o número de iterações
 
-	while(mudanca and it < 20){ // enquanto há mudanças de cluster nos pontos ou o número de iterações é menor que 20
-		if(pct == -2) // caso a função tenha sido chamada pelo GRASP na fase de busca local
-      it++; // a variável it é incrementada (método para garantir que não haja loops infinitos)
+  // enquanto há mudanças de cluster nos pontos
+  // ou o número de iterações é menor que 20 (GRASP)
+	while(mudanca and it < 20){
+    // caso a função tenha sido chamada pelo GRASP na fase de busca local
+		if(pct == -2){
+      // a variável it é incrementada
+      // (método para garantir que não haja loops infinitos)
+      it++;
+    }
+    
     mudanca = false; // a variável mudanca é setada como false
-		dist = agrupamento((inicio ? pct : -1)); // caso o algoritmo esteja no início, é passada como parâmetro a chance de um ponto escolher o segundo cluster mais próximo
+
+    // caso o algoritmo esteja no início, é passada como parâmetro 
+    // a chance de um ponto escolher o segundo cluster mais próximo
+		dist = agrupamento((inicio ? pct : -1));
+
 		for(int i = 0; i < k; i++){ // para cada cluster
 			for(int j = 0; j < d; j++){ // para cada dado do cluster
-        if(clusters[i].qt != 0){ // se a quantidade de pontos for diferente de 0 (forma de previnir divisões por 0)
-				  clusters[i].data[j] = (double) clusters[i].soma[j]/clusters[i].qt; // o dado do cluster é atualizado como a média dos dados de seus pontos
+        // se a quantidade de pontos for diferente de 0
+        // (forma de previnir divisões por 0)
+        if(clusters[i].qt != 0){
+          // o dado do cluster é atualizado como a média dos dados de seus pontos
+				  clusters[i].data[j] = (double) clusters[i].soma[j]/clusters[i].qt;
         }
 			}
 		}
+
 		inicio = false; // a váriavel início é setada com valor baixo
 	}
 
   if(pct == -1){ // caso a função não tenha sido chamada pelo GRASP
+    double sol = 0; // valor real da função objetivo
+
     for(int i = 0; i < n; i++){ // para cada ponto
-      cout << "Ponto " << i << " >> Grupo " << pontos[i].grupo << endl; // é printado o ponto e seu respectivo grupo
+      // é printado o ponto e seu respectivo grupo
+      cout << "Ponto " << i << " >> Grupo " << pontos[i].grupo << endl;
+      // é adicionada na função objetivo a distância ponto centro
+      sol += calc(pontos[i], clusters[pontos[i].grupo], true)/((double) n);
     }
-    cout << "Menor media de distancias: " << dist << endl; // é printado o valor da função objetivo do algoritmo
+    // é printada a função objetivo do algoritmo
+    cout << "Menor media de distancias: " << sol << endl;
   }
+
   return dist; // é retornado o valor da função objetivo do algoritmo
 }

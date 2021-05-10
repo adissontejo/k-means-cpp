@@ -20,12 +20,18 @@ struct cluster{ // estrutura de um cluster
 	int qt = 0; // quantidade de pontos no cluster
 };
 
-extern bool mudanca; // a variável mudanca definida no arquivo agrupamento.cpp é globalizada
-extern bool inicio; // a variável inicio definida no arquivo agrupamento.cpp é globalizada
+// a variável mudanca definida no arquivo agrupamento.cpp é globalizada
+extern bool mudanca;
+// a variável inicio definida no arquivo agrupamento.cpp é globalizada
+extern bool inicio;
 
-extern vector<ponto> pontos; // o vetor de pontos definido no arquivo agrupamento.cpp é globalizado
-extern vector<cluster> clusters; // o vetor de clusters definido no arquivo agrupamento.cpp é globalizado
+// o vetor de pontos definido no arquivo agrupamento.cpp é globalizado
+extern vector<ponto> pontos;
+// o vetor de clusters definido no arquivo agrupamento.cpp é globalizado
+extern vector<cluster> clusters;
 
+// a função de cálculo de distância é definida
+double calc(ponto a, cluster b, bool raiz = false);
 double agrupamento(int pct = -1); // a função de agrupamento é definida
 
 #endif

@@ -32,9 +32,11 @@ void grasp2(){ // função que roda o grasp 2
 
     // enquanto o número de iterações e o tempo não atingem o limite
     while(it < pct + 10 and clock() - tIni < tenSeconds){
-      // o kmedoids com uma porcentagem pct de chance de escolher o
-      // segundo cluster mais próximo é executado como construção
-      double dist = kmedoids(pct);
+      // o k-means ou k-medoids com uma porcentagem pct de chance de escolher
+      // o segundo cluster mais próximo é executado como construção
+      // o uso do k-means e do k-medoids é revezado: caso o número da iteração
+      // seja par, utiliza-se o k-means, caso contrário, o k-medoids
+      double dist = (it%2 == 0 ? kmeans(pct) : kmedoids(pct));
       vector<ponto> solucaoAtual = pontos; // solução atualmente usada
       vector<cluster> clustersAtuais = clusters; // clusters atualmente usados
       // valor da função objetivo da solução atualmente usada
@@ -98,8 +100,10 @@ void grasp2(){ // função que roda o grasp 2
             clusters[novoGrupo].data[j] = clusters[novoGrupo].soma[j]/qtPontos;
           }
 
-          // o kmedoids é executado novamente (-2 é um valor que sinaliza
+          // o k-medoids é executado novamente (-2 é um valor que sinaliza
           // para que o kmedoids não inicialize novos valores de centros)
+          // como a mudança é apenas na inicialização, não há diferença
+          //entre executar k-means ou k-medoids na fase de busca local
           dist = kmedoids(-2);
 
           if(dist < distAtual){ // se a busca local melhorou a solução atual

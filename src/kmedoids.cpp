@@ -55,7 +55,7 @@ double kmedoids(int pct){ // função que roda o k-medoids
   // ou o número de iterações é menor que 20 (GRASP)
 	while(mudanca and it < 20){
     // caso a função tenha sido chamada pelo GRASP na fase de busca local
-		if(pct == -2){
+		if(pct != -1){
       // a variável it é incrementada
       // (método para garantir que não haja loops infinitos)
       it++;

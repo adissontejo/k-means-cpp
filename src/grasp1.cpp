@@ -19,9 +19,9 @@ void grasp1(){ // função que roda o grasp 1
   int k = clusters.size();       // quantidade de clusters
   
   double melhorDist = INFINITY; // melhor distância de todas as iterações
-  vector<ponto> melhorSolucao;  // melhor solução de todas as iterações
-  // melhor definição de clusters de todas as iterações
-  vector<cluster> melhoresClusters;
+  vector<ponto> melhorSolucao = pontos; // melhor solução de todas as iterações
+  vector<ponto> solucaoAtual = pontos; // solução base de cada iteração
+
   clock_t tIni = clock(); // instante de tempo em que a função foi iniciada
   // porcentagem de chance de o algoritmo de agrupamento
   // escolher o segundo centro mais próximo para os pontos
@@ -37,7 +37,10 @@ void grasp1(){ // função que roda o grasp 1
       // o uso do k-means e do k-medoids é revezado: caso o número da iteração
       // seja par, utiliza-se o k-means, caso contrário, o k-medoids
       double dist = (it%2 == 0 ? kmeans(pct) : kmedoids(pct));
-      vector<ponto> solucaoAtual = pontos; // solução atualmente usada
+      for(int i = 0; i < n; i++){ // para cada ponto
+        // a solução atual é atualizada
+        solucaoAtual[i].grupo = pontos[i].grupo;
+      }
       vector<cluster> clustersAtuais = clusters; // clusters atualmente usados
       // valor da função objetivo da solução atualmente usada
       double distAtual = dist;
@@ -109,7 +112,9 @@ void grasp1(){ // função que roda o grasp 1
             distAtual = dist;
             // a solução atual utilizada é definida como as configurações
             // de ponto realizadas no último agrupamento
-            solucaoAtual = pontos;
+            for(int j = 0; j < n; j++){
+              solucaoAtual[j].grupo = pontos[j].grupo;
+            }
             // os clusters atuais utilizados são definidos como as
             // configurações de clusters realizadas no último agrupamento
             clustersAtuais = clusters;
@@ -118,7 +123,9 @@ void grasp1(){ // função que roda o grasp 1
           }else{ // se não
             // o vetor de pontos global volta a ser
             // o vetor de pontos da solução atual
-            pontos = solucaoAtual;
+            for(int j = 0; j < n; j++){
+              pontos[j].grupo = solucaoAtual[j].grupo;
+            }
             // o vetor de clusters global volta a ser
             // o vetor de clusters atual
             clusters = clustersAtuais;
@@ -133,10 +140,9 @@ void grasp1(){ // função que roda o grasp 1
           melhorDist = distAtual;
           // o vetor de pontos da melhor solução é definido
           // como o vetor da solução atual
-          melhorSolucao = solucaoAtual;
-          // o vetor de clusters da melhor solução é definido
-          // como o vetor da solução atual
-          melhoresClusters = clustersAtuais;
+          for(int i = 0; i < n; i++){
+            melhorSolucao[i].grupo = solucaoAtual[i].grupo;
+          }
         }
       }
       it++; // o vetor da quantidade de iterações é incrementado

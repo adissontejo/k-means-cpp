@@ -164,6 +164,12 @@ double calc(){ // função que roda o grasp 1
     }
   }
 
+  cout << "Quantidade de clusters: " << k << endl;
+  for (int i = 0; i < n; i++) {
+    cout << "Ponto " << i << " >> Grupo " << pontos[i].grupo << endl;
+  }
+  cout << "Menor soma de distancias: " << melhorDist << "\n\n";
+
   return melhorDist;
 }
 
@@ -172,35 +178,31 @@ double calc(){ // função que roda o grasp 1
 // clusters para verificar qual é a melhor quantidade de 
 // acordo com o método do cotovelo
 void grasp1(){
-  int qt; // quantidade de clusters que será a melhor quantidade
+  int melhorQt; // quantidade de clusters que será a melhor quantidade
   // função objetivo para k = 2, função objetivo para k = 8, melhor função
   // objetivo e melhor distância do método do cotovelo, respectivamente
-  double a0, a6, melhorDist, melhorDistCot;
-  // melhor solução obtida nas diferentes quantidades de clusters
-  vector<ponto> melhorSol;
+  double a0, a6, melhorDistCot;
+  double distCot[7];
 
   // são feitas as primeiras execuções
   clusters.resize(2);
   a0 = calc();
-  melhorDist = a0;
-  melhorSol = melhorSolucao;
 
   clusters.resize(8);
   a6 = calc();
 
-  melhorDistCot = distCotovelo(a0, a6, a0, 2);
-  qt = 2;
+  distCot[0] = distCotovelo(a0, a6, a0, 2);
+  melhorDistCot = distCot[0];
+  melhorQt = 2;
 
   // é armazenada a distância do método no valor máximo
-  double distCot = distCotovelo(a0, a6, a6, 8);
+  distCot[6] = distCotovelo(a0, a6, a6, 8);
   
   // se a segunda execução for melhor que a primeira, os melhores 
   // valores são definidos como os valores da segunda execução
-  if(distCot > melhorDistCot){
-    melhorDist = a6;
-    melhorDistCot = distCot;
-    melhorSol = melhorSolucao;
-    qt = 8;
+  if(distCot[6] > melhorDistCot){
+    melhorDistCot = distCot[6];
+    melhorQt = 8;
   }
   
   for(int i = 3; i <= 7; i++){ // variando de 3 até 7 clusters
@@ -208,23 +210,20 @@ void grasp1(){
     // é armazenada a função objetivo da execução com i clusters
     double dist = calc();
     // é feito o cálculo da distância do método do cotovelo
-    distCot = distCotovelo(a0, a6, dist, i);
+    distCot[i - 2] = distCotovelo(a0, a6, dist, i);
 
     // se o cálculo feito for melhor que a melhor distância do método,
     // os melhores valores são definidos como os valores atuais
-    if(distCot > melhorDistCot){
-      melhorDist = dist;
-      melhorDistCot = distCot;
-      melhorSol = melhorSolucao;
-      qt = i;
+    if(distCot[i - 2] > melhorDistCot){
+      melhorDistCot = distCot[i - 2];
+      melhorQt = i;
     }
-
-    cout << i << " " << dist << " " << distCot << endl;
   }
 
-  cout << "Quantidade de clusters: " << qt << endl;
-    for(int i = 0; i < melhorSol.size(); i++){
-      cout << "Ponto " << i << " >> Grupo " << melhorSol[i].grupo << endl;
-    }
-  cout << "Menor soma de distancias: " << melhorDist << endl;
+
+  for(int i = 0; i < 7; i++){
+    cout << "Distancia do metodo com " << i + 2 << " clusters: " << distCot[i] << endl;
+  }
+
+  cout << "Melhor quantidade de clusters: " << melhorQt << endl;
 }

@@ -30,6 +30,7 @@ int main(int argc, char **argv){ // função main que recebe argc e argv como pa
 		cin >> id;
 		for(int j = 0; j < d - 1; j++){ // para cada dado do ponto
 			cin >> pontos[i].data[j]; // é lido o dado do ponto
+			pontos[i].data[j] *= 100;
 		}
 	}
 

@@ -11,7 +11,7 @@
 
 using namespace std;
 
-#define tenMinutes CLOCKS_PER_SEC
+#define tenMinutes 600*CLOCKS_PER_SEC
 
 vector<ponto> melhorSolucao; // melhor solução de todas as iterações
 
@@ -219,6 +219,7 @@ void grasp1(){
       qt = i;
     }
   }
+
   cout << "Quantidade de clusters: " << qt << endl;
     for(int i = 0; i < melhorSol.size(); i++){
       cout << "Ponto " << i << " >> Grupo " << melhorSol[i].grupo << endl;

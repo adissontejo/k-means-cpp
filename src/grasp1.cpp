@@ -11,15 +11,24 @@
 
 using namespace std;
 
-#define tenSeconds 10*CLOCKS_PER_SEC
+#define tenMinutes CLOCKS_PER_SEC
 
-void grasp1(){ // função que roda o grasp 1
+vector<ponto> melhorSolucao; // melhor solução de todas as iterações
+
+// função que calcula a distâsncia do método do cotovelo de acordo com a fórmula
+double distCotovelo(double a0, double a6, double d, double k){
+  double num = abs((a6 - a0)*k - 6*d + 8*a0 - 2*a6);
+  double den = sqrt(pow(a6 - a0, 2) + 36);
+  return num/den;
+}
+
+double calc(){ // função que roda o grasp 1
   int n = pontos.size();         // quantidade de pontos
   int d = pontos[0].data.size(); // dimensão
   int k = clusters.size();       // quantidade de clusters
   
   double melhorDist = INFINITY; // melhor distância de todas as iterações
-  vector<ponto> melhorSolucao = pontos; // melhor solução de todas as iterações
+  melhorSolucao = pontos;
   vector<ponto> solucaoAtual = pontos; // solução base de cada iteração
 
   clock_t tIni = clock(); // instante de tempo em que a função foi iniciada
@@ -27,11 +36,11 @@ void grasp1(){ // função que roda o grasp 1
   // escolher o segundo centro mais próximo para os pontos
   int pct = 0;
 
-  while(clock() - tIni < tenSeconds){ // enquanto o tempo limite não é atingido
+  while(clock() - tIni < tenMinutes){ // enquanto o tempo limite não é atingido
     int it = 0; // quantidade de iterações do algoritmo
 
     // enquanto o número de iterações e o tempo não atingem o limite
-    while(it < pct + 10 and clock() - tIni < tenSeconds){
+    while(it < pct + 10 and clock() - tIni < tenMinutes){
       // o k-means ou k-medoids com uma porcentagem pct de chance de escolher
       // o segundo cluster mais próximo é executado como construção
       // o uso do k-means e do k-medoids é revezado: caso o número da iteração
@@ -47,7 +56,7 @@ void grasp1(){ // função que roda o grasp 1
       // variável que indica se houve melhora na busca local ou não
       bool melhora = true;
       // enquanto há melhora e o tempo limite não é atingido
-      while(melhora and clock() - tIni < tenSeconds){
+      while(melhora and clock() - tIni < tenMinutes){
         melhora = false; // a variável melhora é setada como false
         int lista[n]; // a lista que será bagunçada e aleatoriezada é gerada
         
@@ -157,11 +166,62 @@ void grasp1(){ // função que roda o grasp 1
     }
   }
 
-  for(int i = 0; i < n; i++){ // para cada ponto
-    // é printado o ponto e seu respectivo grupo
-    int grupo = melhorSolucao[i].grupo;
-    cout << "Ponto " << i << " >> Grupo " << grupo << endl;
+  return melhorDist;
+}
+
+
+// função que roda o grasp1 em 7 quantidades diferentes de
+// clusters para verificar qual é a melhor quantidade de 
+// acordo com o método do cotovelo
+void grasp1(){
+  int qt; // quantidade de clusters que será a melhor quantidade
+  // função objetivo para k = 2, função objetivo para k = 8, melhor função
+  // objetivo e melhor distância do método do cotovelo, respectivamente
+  double a0, a6, melhorDist, melhorDistCot;
+  // melhor solução obtida nas diferentes quantidades de clusters
+  vector<ponto> melhorSol;
+
+  // é armazenada a primeira execução com k = 2 (valor mínimo)
+  clusters.resize(2);
+  a0 = calc();
+  melhorDist = a0;
+  melhorDistCot = distCotovelo(a0, a6, a0, 2);
+  melhorSol = melhorSolucao;
+  qt = 2;
+
+  // é armazenada a segunda execução com k = 8 (valor máximo)
+  clusters.resize(8);
+  a6 = calc();
+  double distCot = distCotovelo(a0, a6, a6, 8);
+  
+  // se a segunda execução for melhor que a primeira, os melhores 
+  // valores são definidos como os valores da segunda execução
+  if(distCot > melhorDistCot){
+    melhorDist = a6;
+    melhorDistCot = distCot;
+    melhorSol = melhorSolucao;
+    qt = 8;
   }
-  // é printada a função objetivo do algoritmo
-  cout << "Menor soma de distancias: " << melhorDist << endl;
+  
+  for(int i = 3; i <= 7; i++){ // variando de 3 até 7 clusters
+    clusters.resize(i); // o vetor de cluster é definido com tamanho i
+    // é armazenada a função objetivo da execução com i clusters
+    double dist = calc();
+    // é feito o cálculo da distância do método do cotovelo
+    distCot = distCotovelo(a0, a6, dist, i);
+
+    // se o cálculo feito for melhor que a melhor distância do método,
+    // os melhores valores são definidos como os valores atuais
+    if(distCot > melhorDistCot){
+      melhorDist = dist;
+      melhorDistCot = distCot;
+      melhorSol = melhorSolucao;
+      qt = i;
+    }
+  }
+  cout << "Quantidade de clusters: " << qt << endl;
+    for(int i = 0; i < melhorSol.size(); i++){
+      cout << "Ponto " << i << " >> Grupo " << melhorSol[i].grupo << endl;
+    }
+  cout << "Media de distancias: " << melhorDist << endl;
 }

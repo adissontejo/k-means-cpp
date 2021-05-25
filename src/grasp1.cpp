@@ -41,11 +41,9 @@ double calc(){ // função que roda o grasp 1
 
     // enquanto o número de iterações e o tempo não atingem o limite
     while(it < pct + 10 and clock() - tIni < tenMinutes){
-      // o k-means ou k-medoids com uma porcentagem pct de chance de escolher
+      // o k-medoids com uma porcentagem pct de chance de escolher
       // o segundo cluster mais próximo é executado como construção
-      // o uso do k-means e do k-medoids é revezado: caso o número da iteração
-      // seja par, utiliza-se o k-means, caso contrário, o k-medoids
-      double dist = (it%2 == 0 ? kmeans(pct) : kmedoids(pct));
+      double dist = kmedoids(pct);
       for(int i = 0; i < n; i++){ // para cada ponto
         // a solução atual é atualizada
         solucaoAtual[i].grupo = pontos[i].grupo;
@@ -181,17 +179,19 @@ void grasp1(){
   // melhor solução obtida nas diferentes quantidades de clusters
   vector<ponto> melhorSol;
 
-  // é armazenada a primeira execução com k = 2 (valor mínimo)
+  // são feitas as primeiras execuções
   clusters.resize(2);
   a0 = calc();
   melhorDist = a0;
-  melhorDistCot = distCotovelo(a0, a6, a0, 2);
   melhorSol = melhorSolucao;
-  qt = 2;
 
-  // é armazenada a segunda execução com k = 8 (valor máximo)
   clusters.resize(8);
   a6 = calc();
+
+  melhorDistCot = distCotovelo(a0, a6, a0, 2);
+  qt = 2;
+
+  // é armazenada a distância do método no valor máximo
   double distCot = distCotovelo(a0, a6, a6, 8);
   
   // se a segunda execução for melhor que a primeira, os melhores 
@@ -218,11 +218,13 @@ void grasp1(){
       melhorSol = melhorSolucao;
       qt = i;
     }
+
+    cout << i << " " << dist << " " << distCot << endl;
   }
 
   cout << "Quantidade de clusters: " << qt << endl;
     for(int i = 0; i < melhorSol.size(); i++){
       cout << "Ponto " << i << " >> Grupo " << melhorSol[i].grupo << endl;
     }
-  cout << "Media de distancias: " << melhorDist << endl;
+  cout << "Menor soma de distancias: " << melhorDist << endl;
 }

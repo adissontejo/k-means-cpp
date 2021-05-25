@@ -24,8 +24,11 @@ int main(int argc, char **argv){ // função main que recebe argc e argv como pa
 	pontos.resize(n); // vetor dos pontos é definido com tamanho n
 
 	for(int i = 0; i < n; i++){ // para cada ponto
-		pontos[i].data.resize(d); // é definido o tamanho do vetor de dados do ponto
-		for(int j = 0; j < d; j++){ // para cada dado do ponto
+		// é definido o tamanho do vetor de dados do ponto
+		pontos[i].data.resize(d - 1);
+		int id;
+		cin >> id;
+		for(int j = 0; j < d - 1; j++){ // para cada dado do ponto
 			cin >> pontos[i].data[j]; // é lido o dado do ponto
 		}
 	}

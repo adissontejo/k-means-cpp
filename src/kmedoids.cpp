@@ -86,6 +86,9 @@ double kmedoids(int pct){ // função que roda o k-medoids
       // é printado o ponto e seu respectivo grupo
       cout << "Ponto " << i << " >> Grupo " << pontos[i].grupo << endl;
     }
+    for(int i = 0; i < k; i++){
+      cout << "Cluster " << i << " >> " << clusters[i].qt << " Pontos\n";
+    }
     // é printada a função objetivo do algoritmo
     cout << "Menor soma de distancias: " << dist << endl;
   }

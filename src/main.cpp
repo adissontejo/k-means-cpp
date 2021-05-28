@@ -14,7 +14,7 @@ int main(int argc, char **argv){ // função main que recebe argc e argv como pa
 	srand (time(NULL));
 	
 	if(argc < 2){ // caso a quantidade de argumentos seja maior que 2
-		cout << "   *** Usage: " << argv[0] << " KMO|PSO|GEN|GRP1|GRP2\n"; // é printada a forma de uso do comando
+		cout << "   *** Usage: " << argv[0] << " KMO|KMD|PSO|GEN|GRP1|GRP2\n"; // é printada a forma de uso do comando
 		exit(0); // o programa é finalizado
 	}
 
@@ -35,7 +35,7 @@ int main(int argc, char **argv){ // função main que recebe argc e argv como pa
 	}
 
 	if(argc < 3){ // se a quantidade de argumentos for menor que 3
-		k = 3;	// a quantidade de grupos é definida como padrão (3)
+		k = 4;	// a quantidade de grupos é definida como padrão (3)
 	}else{ // se não
 		k = atoi(argv[2]); // a quantidade de grupos é definida com o valor do terceiro argumento
 	}

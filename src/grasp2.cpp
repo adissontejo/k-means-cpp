@@ -36,7 +36,7 @@ void grasp2(){ // função que roda o grasp 2
       // o segundo cluster mais próximo é executado como construção
       // o uso do k-means e do k-medoids é revezado: caso o número da iteração
       // seja par, utiliza-se o k-means, caso contrário, o k-medoids
-      double dist = (it%2 == 0 ? kmeans(pct) : kmedoids(pct));
+      double dist = kmedoids(pct);
       for(int i = 0; i < n; i++){ // para cada ponto
         // a solução atual é atualizada
         solucaoAtual[i].grupo = pontos[i].grupo;
@@ -115,7 +115,7 @@ void grasp2(){ // função que roda o grasp 2
             distAtual = dist;
             // a solução atual utilizada é definida como as configurações
             // de ponto realizadas no último agrupamento
-            for(int j = 0; j < n; i++){
+            for(int j = 0; j < n; j++){
               solucaoAtual[j].grupo = pontos[j].grupo;
             }
             // os clusters atuais utilizados são definidos como as

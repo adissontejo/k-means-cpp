@@ -55,7 +55,7 @@ double kmedoids(int pct){ // função que roda o k-medoids
   // ou o número de iterações é menor que 20 (GRASP)
 	while(mudanca and it < 20){
     // caso a função tenha sido chamada pelo GRASP na fase de busca local
-		if(pct != -1){
+		if(pct == -2){
       // a variável it é incrementada
       // (método para garantir que não haja loops infinitos)
       it++;
@@ -82,10 +82,6 @@ double kmedoids(int pct){ // função que roda o k-medoids
 	}
 
   if(pct == -1){ // caso a função não tenha sido chamada pelo GRASP
-    for(int i = 0; i < n; i++){ // para cada ponto
-      // é printado o ponto e seu respectivo grupo
-      cout << "Ponto " << i << " >> Grupo " << pontos[i].grupo << endl;
-    }
     for(int i = 0; i < k; i++){
       cout << "Cluster " << i << " >> " << clusters[i].qt << " Pontos\n";
     }
